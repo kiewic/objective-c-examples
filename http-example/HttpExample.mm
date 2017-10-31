@@ -1,10 +1,14 @@
 #include <iostream>
 #import <Foundation/Foundation.h>
 
+void ReadPlist();
+
 int main (int argc, const char* argv[])
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"Hello world!");
+
+    ReadPlist();
 
     NSString *urlString = [NSString stringWithFormat:@"http://heyhttp.org"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
@@ -25,8 +29,24 @@ int main (int argc, const char* argv[])
 
     NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
-    std::cout << [responseString cStringUsingEncoding:NSUTF8StringEncoding];
+    //std::cout << [responseString cStringUsingEncoding:NSUTF8StringEncoding];
 
     [pool drain];
     return 0;
+}
+
+void ReadPlist()
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"plist.plist"];
+    NSLog(@"%@", path);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    NSMutableDictionary *data;
+    if ([fileManager fileExistsAtPath:path])
+    {
+        data = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
+    }
 }
